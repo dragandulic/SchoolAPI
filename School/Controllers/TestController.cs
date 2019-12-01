@@ -13,6 +13,7 @@ namespace School.Controllers
         public IActionResult Get()
         {
             //dev branch
+            //Change test controller on dev
             return Ok(new { name = "Hello from API !" });
         }
     }
