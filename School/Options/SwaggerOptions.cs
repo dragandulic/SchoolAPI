@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace School.Options
 {
-    public class SwaggerOptions
+    public class Swaggeroptions
     {
         public string JsonRoute { get; set; }
 
