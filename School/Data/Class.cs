@@ -7,6 +7,7 @@ namespace School.Data
     {
         public Class()
         {
+            Announcement = new HashSet<Announcement>();
             ClassPerson = new HashSet<ClassPerson>();
             ClassSubject = new HashSet<ClassSubject>();
         }
@@ -18,6 +19,7 @@ namespace School.Data
         public string Generation { get; set; }
 
         public virtual Academy Academy { get; set; }
+        public virtual ICollection<Announcement> Announcement { get; set; }
         public virtual ICollection<ClassPerson> ClassPerson { get; set; }
         public virtual ICollection<ClassSubject> ClassSubject { get; set; }
     }

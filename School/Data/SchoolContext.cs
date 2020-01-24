@@ -53,6 +53,12 @@ namespace School.Data
             {
                 entity.Property(e => e.Time).HasColumnType("datetime");
 
+                entity.HasOne(d => d.Class)
+                    .WithMany(p => p.Announcement)
+                    .HasForeignKey(d => d.ClassId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Announcement_Class");
+
                 entity.HasOne(d => d.Person)
                     .WithMany(p => p.Announcement)
                     .HasForeignKey(d => d.PersonId)

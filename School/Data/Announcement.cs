@@ -15,7 +15,9 @@ namespace School.Data
         public string Description { get; set; }
         public DateTime? Time { get; set; }
         public long PersonId { get; set; }
+        public long? ClassId { get; set; }
 
+        public virtual Class Class { get; set; }
         public virtual Person Person { get; set; }
         public virtual ICollection<Comment> Comment { get; set; }
     }
