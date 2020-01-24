@@ -20,18 +20,18 @@ namespace School.Controllers
         }
 
         [HttpPost("api/registration")]
-        public async Task<IActionResult> Registration([FromBody] UserRegistrationRequest request)
+        public async Task<IActionResult> Registration( UserRegistrationRequest model)
         {
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(new AuthFailedResponse
-                { 
+                {
                     Errors = ModelState.Values.SelectMany(x => x.Errors.Select(xx => xx.ErrorMessage))
                 });
             }
 
-            var authResponse = await _identityService.RegisterAsync(request.Email, request.Password);
+            var authResponse = await _identityService.RegisterAsync(model);
 
             if (!authResponse.Success)
             {
@@ -62,6 +62,14 @@ namespace School.Controllers
             {
                 Token = authResponse.Token
             });
+        }
+
+        [HttpPost("api/createRole")]
+        public async Task<IActionResult> CreateRole(string roleName)
+        {
+            var response = await _identityService.CreateRole(roleName);
+         
+            return Json(response);
         }
 
     }
