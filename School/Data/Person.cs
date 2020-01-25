@@ -28,4 +28,4 @@ namespace School.Data
         public virtual ICollection<Person> InverseMyParent { get; set; }
         public virtual ICollection<Subject> Subject { get; set; }
     }
-}
+}   

@@ -54,7 +54,9 @@ namespace School.Services.Impl
             { 
                 Email = model.Email,
                 UserName = model.Email,
-                PersonId = person.Id
+                PersonId = person.Id,
+                PhoneNumber = model.PhoneNumber
+                
             };
 
             var createdUser = await _userManager.CreateAsync(newUser, model.Password);
