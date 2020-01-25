@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using School.Data;
 using School.Options;
 using System.Security.Claims;
+using School.Contracts;
 
 namespace School.Services.Impl
 {
@@ -17,16 +18,20 @@ namespace School.Services.Impl
 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly JwtSettings _jwtSettings;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SchoolContext _entity;
 
-        public IdentityService(UserManager<ApplicationUser> userManager, JwtSettings jwtSettings)
+        public IdentityService(UserManager<ApplicationUser> userManager, JwtSettings jwtSettings, RoleManager<IdentityRole> roleManager, SchoolContext entity)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
+            _roleManager = roleManager;
+            _entity = entity;
         }
 
-        public async Task<AuthenticationResult> RegisterAsync(string email, string password)
+        public async Task<AuthenticationResult> RegisterAsync(UserRegistrationRequest model)
         {
-            var existingUser = await _userManager.FindByEmailAsync(email);
+            var existingUser = await _userManager.FindByEmailAsync(model.Email);
 
             if (existingUser != null)
             {
@@ -36,13 +41,25 @@ namespace School.Services.Impl
                 };
             }
 
-            var newUser = new ApplicationUser
-            { 
-                Email = email,
-                UserName = email
+            var person = new Person
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName
             };
 
-            var createdUser = await _userManager.CreateAsync(newUser, password);
+            var res = _entity.Person.Add(person);
+            _entity.SaveChanges();
+
+            var newUser = new ApplicationUser
+            { 
+                Email = model.Email,
+                UserName = model.Email,
+                PersonId = person.Id,
+                PhoneNumber = model.PhoneNumber
+                
+            };
+
+            var createdUser = await _userManager.CreateAsync(newUser, model.Password);
 
             if (!createdUser.Succeeded)
             {
@@ -51,13 +68,16 @@ namespace School.Services.Impl
                     Errors = createdUser.Errors.Select(x => x.Description)
                 };
             }
-
-            return new AuthenticationResult
+            else 
             {
-                Success = true
-            };
-        }
+                return new AuthenticationResult
+                {
+                    Success = true
+                };
+            }
 
+
+        }
 
         public async Task<AuthenticationResult> LoginAsync(string email, string password)
         {
@@ -111,5 +131,23 @@ namespace School.Services.Impl
             };
         }
 
+        public async Task<string> CreateRole(string roleName)
+        {
+            try
+            {
+                IdentityRole role = new IdentityRole
+                {
+                    Name = roleName
+                };
+
+                IdentityResult result = await _roleManager.CreateAsync(role);
+
+                return "Ok";
+            }
+            catch (Exception ex)
+            {
+                return "Error";
+            }
+        }
     }
 }

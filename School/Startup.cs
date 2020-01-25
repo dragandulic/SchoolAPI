@@ -41,14 +41,15 @@ namespace School
             services.AddDbContext<SchoolContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<DataContext>();
             //services.AddControllersWithViews();
             //services.AddRazorPages();
             services.AddMvc(option => option.EnableEndpointRouting = false).AddNewtonsoftJson();
 
             services.AddScoped<IIdentityService, IdentityService>();
-
+            services.AddScoped<IStudentService, StudentService>();
 
             var jwtSettings = new JwtSettings();
             Configuration.GetSection(nameof(JwtSettings)).Bind(jwtSettings);
