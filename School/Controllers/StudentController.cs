@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace School.Controllers
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("Student")]
     public class StudentController : Controller
     {
 
@@ -24,7 +25,7 @@ namespace School.Controllers
             _studentService = studentService;
         }
 
-        [HttpGet("api/GetStudentsFromMyClass")]
+        [HttpGet("GetStudentsFromMyClass")]
         public async Task<IActionResult> GetStudentsFromMyClass()
         {
             var user = await _userManager.FindByNameAsync(_userManager.GetUserId(HttpContext.User));
