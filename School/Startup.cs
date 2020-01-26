@@ -50,6 +50,7 @@ namespace School
 
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<IAnnouncementService, AnnouncementService>();
 
             var jwtSettings = new JwtSettings();
             Configuration.GetSection(nameof(JwtSettings)).Bind(jwtSettings);
