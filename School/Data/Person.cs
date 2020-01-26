@@ -19,6 +19,7 @@ namespace School.Data
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public long? MyParentId { get; set; }
+        public string ImageUrl { get; set; }
 
         public virtual Person MyParent { get; set; }
         public virtual ICollection<Announcement> Announcement { get; set; }
@@ -28,4 +29,4 @@ namespace School.Data
         public virtual ICollection<Person> InverseMyParent { get; set; }
         public virtual ICollection<Subject> Subject { get; set; }
     }
-}   
+}

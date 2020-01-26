@@ -34,7 +34,8 @@ namespace School.Services.Impl
                     FirstName = s.Person.FirstName,
                     LastName = s.Person.LastName,
                     Email = s.Person.AspNetUsers.FirstOrDefault().Email,
-                    PhoneNumber = s.Person.AspNetUsers.FirstOrDefault().PhoneNumber
+                    PhoneNumber = s.Person.AspNetUsers.FirstOrDefault().PhoneNumber,
+                    ImageUrl = s.Person.ImageUrl
                 }).ToList();
 
                 response.Value.AddRange(students);
