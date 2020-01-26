@@ -48,7 +48,7 @@ namespace School
             services.AddMvc(option => option.EnableEndpointRouting = false).AddNewtonsoftJson();
 
             services.AddScoped<IIdentityService, IdentityService>();
-
+            services.AddScoped<IAnnouncementService, AnnouncementService>();
 
             var jwtSettings = new JwtSettings();
             Configuration.GetSection(nameof(JwtSettings)).Bind(jwtSettings);

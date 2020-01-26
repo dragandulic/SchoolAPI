@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace School.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class TestController : Controller
     {
         private readonly SchoolContext _context;
@@ -19,7 +19,7 @@ namespace School.Controllers
             _context = context;
         }
 
-        [HttpGet("api/test")]
+        [HttpGet("/api/test")]
         public IActionResult Get()
         {
             //dev branch
