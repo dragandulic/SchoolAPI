@@ -1,4 +1,5 @@
 ﻿using School.Contracts;
+using School.Contracts.Responses;
 using School.Data;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,6 @@ namespace School.Services
         Task<AuthenticationResult> RegisterAsync(UserRegistrationRequest model);
         Task<AuthenticationResult> LoginAsync(string email, string password);
         Task<string> CreateRole(string roleName);
+        Response<UserModel> GetPerson(long personId);
     }
 }

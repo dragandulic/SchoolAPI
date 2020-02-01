@@ -10,6 +10,7 @@ using School.Data;
 using School.Options;
 using System.Security.Claims;
 using School.Contracts;
+using School.Contracts.Responses;
 
 namespace School.Services.Impl
 {
@@ -148,6 +149,27 @@ namespace School.Services.Impl
             {
                 return "Error";
             }
+        }
+
+        public Response<UserModel> GetPerson(long personId)
+        {
+            var response = new Response<UserModel>();
+            try
+            {
+                var p = _entity.Person.Find(personId);
+                var person = new UserModel()
+                {
+                    FirstAndLastName = p.FirstName + " " + p.LastName,
+                    ImageUrl = p.ImageUrl,
+                };
+                response.Value =person;
+                
+            }
+            catch (Exception e)
+            {
+
+            }
+            return response;
         }
     }
 }

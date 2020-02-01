@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using School.Contracts;
 using School.Contracts.Requests;
 using School.Contracts.Responses;
+using School.Data;
 using School.Services;
 using System;
 using System.Collections.Generic;
@@ -13,10 +15,12 @@ namespace School.Controllers
     public class IdentityController : Controller
     {
         private readonly IIdentityService _identityService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public IdentityController(IIdentityService identityService)
+        public IdentityController(IIdentityService identityService, UserManager<ApplicationUser> userManager)
         {
             _identityService = identityService;
+            _userManager = userManager;
         }
 
         [HttpPost("api/registration")]
@@ -70,6 +74,15 @@ namespace School.Controllers
             var response = await _identityService.CreateRole(roleName);
          
             return Json(response);
+        }
+
+        [HttpGet("api/GetPerson")]
+        public async Task<IActionResult> GetPerson()
+        {
+            var user = await _userManager.FindByNameAsync(_userManager.GetUserId(HttpContext.User));
+            var person = _identityService.GetPerson((long)user.PersonId).Value;
+            person.Email = user.Email;
+            return Json(person);
         }
 
     }
