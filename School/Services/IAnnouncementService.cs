@@ -9,5 +9,6 @@ namespace School.Services
     public interface IAnnouncementService
     {
         Response<List<AnnouncementModel>> GetAll(long personId);
+        Response<long> AddAnnouncement(AnnouncementModel model, long currentPersonId);
     }
 }

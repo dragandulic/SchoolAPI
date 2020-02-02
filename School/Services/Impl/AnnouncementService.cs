@@ -17,6 +17,31 @@ namespace School.Services.Impl
             _schoolContext = schoolContext;
         }
 
+        public Response<long> AddAnnouncement(AnnouncementModel model, long currentPersonId)
+        {
+            var response = new Response<long>();
+            try
+            {
+                var classOfPerson = _schoolContext.ClassPerson.Where(c => c.PersonId == currentPersonId && c.Class.Active == true).FirstOrDefault().ClassId;
+                var announcemnt = new Announcement()
+                {
+                    Title = model.Title,
+                    Description = model.Description,
+                    ClassId = classOfPerson,
+                    PersonId = currentPersonId,
+                    Time = DateTime.Now
+                };
+                _schoolContext.Announcement.Add(announcemnt);
+                _schoolContext.SaveChanges();
+                response.Value = announcemnt.Id;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return response;
+        }
+
         Response<List<AnnouncementModel>> IAnnouncementService.GetAll(long personId)
         {
             var response = new Response<List<AnnouncementModel>>()

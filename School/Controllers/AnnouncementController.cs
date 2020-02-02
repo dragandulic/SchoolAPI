@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using School.Contracts.Responses;
 using School.Data;
 using School.Services;
 using System;
@@ -37,6 +38,15 @@ namespace School.Controllers
         {
             var user = await _userManager.FindByNameAsync(_userManager.GetUserId(HttpContext.User));
             var response = _announcementService.GetAll((long)user.PersonId);
+
+            return Json(response.Value);
+        }
+
+        [HttpPost("api/AddAnnouncement")]
+        public async Task<IActionResult> AddAnnouncement([FromBody] AnnouncementModel request)
+        {
+            var user = await _userManager.FindByNameAsync(_userManager.GetUserId(HttpContext.User));
+            var response = _announcementService.AddAnnouncement(request, (long)user.PersonId);
 
             return Json(response.Value);
         }
