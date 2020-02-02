@@ -17,9 +17,9 @@ namespace School.Services.Impl
             _schoolContext = schoolContext;
         }
 
-        public Response<long> AddAnnouncement(AnnouncementModel model, long currentPersonId)
+        public Response<AnnouncementModel> AddAnnouncement(AnnouncementModel model, long currentPersonId)
         {
-            var response = new Response<long>();
+            var response = new Response<AnnouncementModel>();
             try
             {
                 var classOfPerson = _schoolContext.ClassPerson.Where(c => c.PersonId == currentPersonId && c.Class.Active == true).FirstOrDefault().ClassId;
@@ -31,9 +31,21 @@ namespace School.Services.Impl
                     PersonId = currentPersonId,
                     Time = DateTime.Now
                 };
+
                 _schoolContext.Announcement.Add(announcemnt);
                 _schoolContext.SaveChanges();
-                response.Value = announcemnt.Id;
+
+                var person = _schoolContext.Person.Find(currentPersonId);
+
+                var announcementModel = new AnnouncementModel()
+                {
+                    Title = announcemnt.Title,
+                    Description = announcemnt.Description,
+                    Time = announcemnt.Time.Value.ToString("dd.MM.yyyy. HH:mm"),
+                    CreatedBy = person.FirstName + " " + person.LastName
+                };
+
+                response.Value = announcementModel;
             }
             catch (Exception ex)
             {
