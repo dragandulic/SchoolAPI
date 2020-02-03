@@ -21,6 +21,8 @@ namespace School.Data
         public long? MyParentId { get; set; }
         public string ImageUrl { get; set; }
 
+        public string DeviceId { get; set; }
+
         public virtual Person MyParent { get; set; }
         public virtual ICollection<Announcement> Announcement { get; set; }
         public virtual ICollection<AspNetUsers> AspNetUsers { get; set; }
