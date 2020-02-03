@@ -30,8 +30,22 @@ namespace School.Controllers
         {
             var user = await _userManager.FindByNameAsync(_userManager.GetUserId(HttpContext.User));
 
+            var users = _userManager.Users.ToList();
+            var teachers = new List<long>();
+            foreach (var u in users)
+            {
+                var roles = await _userManager.GetRolesAsync(u);
+                foreach (var role in roles)
+                {
+                    if (role.Equals("Teacher"))
+                    {
+                        teachers.Add((long)u.PersonId);
+                    }
+                }
+            }
 
-            var response = _studentService.GetStudentsFromMyClass(user.PersonId);
+
+            var response = _studentService.GetStudentsFromMyClass(user.PersonId, teachers);
 
             if (response.Status == "Success")
             {
@@ -41,6 +55,7 @@ namespace School.Controllers
             return Json(response.Status);
 
         }
+
 
     }
 }

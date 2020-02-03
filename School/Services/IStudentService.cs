@@ -8,7 +8,7 @@ namespace School.Services
 {
     public interface IStudentService
     {
-        Response<List<UserModel>> GetStudentsFromMyClass(long? personId);
-    
+        Response<List<UserModel>> GetStudentsFromMyClass(long? personId, List<long> teachers);
+
     }
 }

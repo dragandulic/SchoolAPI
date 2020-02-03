@@ -39,5 +39,32 @@ namespace School.Controllers
             return  Json(response);
 
         }
+
+        [HttpGet("api/GetSubjectsForAllUsers")]
+        public async Task<IActionResult> GetSubjectsForAllUsers()
+        {
+            var user = await _userManager.FindByNameAsync(_userManager.GetUserId(HttpContext.User));
+            var classId = _context.ClassPerson.Where(cp => cp.PersonId == user.PersonId && cp.Class.Active == true).FirstOrDefault().ClassId;
+            var students = _context.ClassPerson.Where(cp => cp.ClassId == classId).Select(cp=>new ClassPersonModel() 
+            { 
+                ClassId=cp.ClassId,
+                Grades=cp.Mark,
+                PersonId=cp.PersonId
+            }).ToList();
+
+            return Json(students);            
+        }
+
+        [HttpPost("api/ChangeGrades")]
+        public async Task<IActionResult> ChangeGradesOfUser([FromBody] ClassPersonModel model)
+        {
+            var user = await _userManager.FindByNameAsync(_userManager.GetUserId(HttpContext.User));
+            var classId = _context.ClassPerson.Where(cp => cp.PersonId == user.PersonId && cp.Class.Active == true).FirstOrDefault().ClassId;
+            var classPerson = _context.ClassPerson.Where(cp => cp.ClassId == classId && cp.PersonId == Convert.ToInt64(model.Personidstring)).FirstOrDefault();
+            classPerson.Mark = model.Grades;
+            _context.SaveChanges();
+
+            return Json("");
+        }
     }
 }
