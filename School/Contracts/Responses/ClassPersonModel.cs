@@ -9,6 +9,7 @@ namespace School.Contracts.Responses
     {
         public long ClassId { get; set; }
         public long PersonId { get; set; }
+        public string Personidstring { get; set; }
         public string Grades { get; set; }
     }
 }

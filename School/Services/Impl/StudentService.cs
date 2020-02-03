@@ -16,7 +16,7 @@ namespace School.Services.Impl
             _entity = schoolContext;
         }
 
-        public Response<List<UserModel>> GetStudentsFromMyClass(long? personId)
+        public Response<List<UserModel>> GetStudentsFromMyClass(long? personId, List<long> teachers)
         {
             var response = new Response<List<UserModel>>()
             {
@@ -28,7 +28,7 @@ namespace School.Services.Impl
             {
 
                 var classId = _entity.ClassPerson.Where(cp => cp.PersonId == personId && cp.Class.Active == true).FirstOrDefault().ClassId;
-                var students = _entity.ClassPerson.Where(p => p.ClassId == classId).Select(s => new UserModel
+                var students = _entity.ClassPerson.Where(p => p.ClassId == classId && !teachers.Contains(p.PersonId)).Select(s => new UserModel
                 {
                     Id = s.Person.Id,
                     FirstName = s.Person.FirstName,
@@ -47,5 +47,7 @@ namespace School.Services.Impl
             }
             return response;
         }
+
+        
     }
 }

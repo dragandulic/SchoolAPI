@@ -16,11 +16,13 @@ namespace School.Controllers
     {
         private readonly IIdentityService _identityService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public IdentityController(IIdentityService identityService, UserManager<ApplicationUser> userManager)
+        public IdentityController(IIdentityService identityService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _identityService = identityService;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         [HttpPost("api/registration")]
@@ -83,6 +85,15 @@ namespace School.Controllers
             var person = _identityService.GetPerson((long)user.PersonId).Value;
             person.Email = user.Email;
             return Json(person);
+        }
+
+        [HttpGet("api/GetRole")]
+        public async Task<IActionResult> GetRole()
+        {
+            var loggedUser = await _userManager.FindByNameAsync(_userManager.GetUserId(HttpContext.User));
+            var roles = await _userManager.GetRolesAsync(loggedUser);
+            var r = roles.FirstOrDefault();
+            return Json(roles.FirstOrDefault());
         }
 
     }
